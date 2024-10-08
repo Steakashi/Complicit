@@ -57,15 +57,8 @@
   }
 
   function launchGame(roomName) {
-    console.log('ok')
-    console.log(router.currentRoute)
-    router.push('/game/')
-    
-    console.log(router.currentRoute)  
+    router.push('/game')
   }
-
-
-  console.log(router.currentRoute)
 
 </script>
 
