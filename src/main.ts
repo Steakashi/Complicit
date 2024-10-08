@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import router from './router'
 import App from './App.vue'
 import store from './store'
 import Vue3Toasity, { type ToastContainerOptions } from 'vue3-toastify';
@@ -9,6 +10,7 @@ import 'vue3-toastify/dist/index.css';
 var app = createApp(App)
 app.use(store)
 app.use(FloatingVue)
+app.use(router)
 app.use(
     Vue3Toasity,
     {

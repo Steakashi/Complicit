@@ -24,13 +24,12 @@ const state = () => ({
 const actions = {
 
     send({commit}, data) {
-        console.log(data)
         commit('send', data); 
     }
 }
 
 const mutations = {
-    success(state, data){ console.log(data); notify_success(data.success) },
+    success(state, data){ notify_success(data.success) },
     error(state, data){ notify_error(data.error); },
 
     register_client_id(state, clientId){
@@ -47,7 +46,6 @@ const mutations = {
 
     retrieve_user(state, data){
         state.userName = data.user.name
-        console.log(state.userName)
     },
 
     update_user_name(state, data){
@@ -59,7 +57,6 @@ const mutations = {
         // #TODO : maybe move that in another call ?
         // if (data.client_id == state.clientId){ 
         //state.currentRoom = data.room;
-        console.log(data.success)
         notify_success(data.success)
         // }
     

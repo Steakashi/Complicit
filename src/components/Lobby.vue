@@ -1,6 +1,7 @@
 <script setup>
 
   import store from '../store'
+  import router from '../router'
   import send from '../api/send'
   import { onMounted, ref, reactive, computed } from 'vue'
   import {  } from 'vue'
@@ -9,11 +10,11 @@
 
   const roomName = defineModel()
 
-  const createRoomCheckbox = ref(null)
+  const lobbyCheckbox = ref(null)
   const UpdateNameButton = ref(null)  
   const updatedUserName = ref(null)
-  const createRoomButton = ref(null)
-  const createRoomError = ref(null)
+  const lobbyButton = ref(null)
+  const lobbyError = ref(null)
 
   const clientId = computed(() => { return store.state.websocket.clientId; })
   const rooms = computed(() => { return store.state.websocket.rooms; })
@@ -24,16 +25,16 @@
   })
   const currentRoom = computed(() => {
     if (store.state.websocket.currentRoom){ 
-      createRoomCheckbox.value.checked = false;
+      lobbyCheckbox.value.checked = false;
     }
     return store.state.websocket.currentRoom 
   })
 
-  const createRoomTooltip = computed(() => {
+  const lobbyTooltip = computed(() => {
     if (!(store.state.websocket.currentRoom)) { return; }
     else {
       if (store.state.websocket.currentRoom.users.length == 1) { return "There is not enough players to launch game."; }
-      else if (store.state.websocket.currentRoom.leader.id != store.state.websocket.clientId) { console.log('in cnodition'); return "Only the leader of the room can launch game."; }
+      else if (store.state.websocket.currentRoom.leader.id != store.state.websocket.clientId) { return "Only the leader of the room can launch game."; }
       else return;
     }
   })
@@ -51,16 +52,24 @@
     let isInvalid = store.state.websocket.rooms.map(room => {
       return room.name.toLowerCase();
     }).includes(roomName.value.toLowerCase()); 
-    createRoomButton.value.disabled = isInvalid
-    createRoomError.value.className = isInvalid ? "" : "hidden"
+    lobbyButton.value.disabled = isInvalid
+    lobbyError.value.className = isInvalid ? "" : "hidden"
   }
+
+  function launchGame(roomName) {
+    console.log('ok')
+    console.log(router.currentRoute)
+    router.push('/game/')
+    
+    console.log(router.currentRoute)  
+  }
+
+
+  console.log(router.currentRoute)
 
 </script>
 
 <template>
-
-  <div>{{ clientId }}</div>
-  <div>{{ userName }}</div>
             
   <h1 class="mb-4 text-center text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Complicit</h1>
     
@@ -90,12 +99,12 @@
           <div class="flex flex-row">
             
             <div v-tooltip="{
-                  content: createRoomTooltip,
-                  disabled: (!(createRoomTooltip))
+                  content: lobbyTooltip,
+                  disabled: (!(lobbyTooltip))
               }">
               <button @click="launchGame(currentRoom.name)" 
                 class="btn btn-outline btn-success mr-6" 
-                :disabled="createRoomTooltip"
+                :disabled="!(lobbyTooltip)"
                 >
                 Launch game
               </button>
@@ -117,15 +126,15 @@
         disabled: (!(currentRoom))
       }">
         <div class="text-center collapse bg-base-200 my-5" >
-        <input ref="createRoomCheckbox" type="checkbox" :disabled="currentRoom"/>
+        <input ref="lobbyCheckbox" type="checkbox" :disabled="currentRoom"/>
         <div class="collapse-title text-xl font-medium" :class="{ 'opacity-30': currentRoom }">Create Room</div>
         <div class="collapse-content">
           <form @submit.prevent="submitForm" class="flex flex-row">
             <input type="text" v-model="roomName" class="p-1 mr-2" @keyup.enter="submit" :disabled="currentRoom" v-on:input="checkRoomNameValidity()" required>
-            <button type="submit" ref="createRoomButton" class="btn btn-success" role="button" :disabled="currentRoom">
+            <button type="submit" ref="lobbyButton" class="btn btn-success" role="button" :disabled="currentRoom">
               Create Room
             </button>
-            <span class="p-3 italic opacity-70 text-error"><p ref="createRoomError" class="hidden">A room already exists with this name.</p></span>
+            <span class="p-3 italic opacity-70 text-error"><p ref="lobbyError" class="hidden">A room already exists with this name.</p></span>
           </form>
         </div>
       </div>

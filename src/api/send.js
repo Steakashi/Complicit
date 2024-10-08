@@ -44,8 +44,6 @@ export default {
     },
 
     update_user_name(user_name){
-        console.log("Update user name")
-        console.log(user_name)
         store.dispatch(
             SEND,
             {
