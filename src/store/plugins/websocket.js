@@ -1,8 +1,8 @@
 export default function createWebSocketPlugin (websocket) {
     return (store) => {
-        websocket.addEventListener("open", (event) => {
-            store.dispatch("send", {'action': 'synchronize'})
-        })
+        // websocket.addEventListener("open", (event) => {
+        //     store.dispatch("send", {'action': 'synchronize'})
+        // })
         websocket.onmessage = function(response) {
             let data = JSON.parse(response.data)
             store.commit(data['action'], data)

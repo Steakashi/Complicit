@@ -4,7 +4,6 @@
   import router from '../router'
   import send from '../api/send'
   import { onMounted, ref, reactive, computed } from 'vue'
-  import {  } from 'vue'
 
   import 'floating-vue/dist/style.css'
 
@@ -19,9 +18,10 @@
   const clientId = computed(() => { return store.state.websocket.clientId; })
   const rooms = computed(() => { return store.state.websocket.rooms; })
   const users = computed(() => { return store.state.websocket.users; })
-  const userName = computed(() => { 
-    updatedUserName.value = store.state.websocket.userName; 
-    return store.state.websocket.userName 
+  const userName = computed(() => {
+    updatedUserName.value = store.state.websocket.userName;
+    if (UpdateNameButton.value){ UpdateNameButton.value.hidden = true; }
+    return store.state.websocket.userName;
   })
   const currentRoom = computed(() => {
     if (store.state.websocket.currentRoom){ 
@@ -42,10 +42,10 @@
   function submitForm() { send.create_room(roomName.value); }
   function joinRoom(joinedRoomName) { send.join_room(joinedRoomName); }
   function leaveRoom(roomNameToLeave) { send.leave_room(roomNameToLeave); }
-  function updateUserName() { send.update_user_name(updatedUserName.value) }
+  function updateUserName() { send.update_user_name(updatedUserName.value); }
 
   function updateButtonVisibility(){
-    UpdateNameButton.value.hidden = updatedUserName.value === userName.value
+    UpdateNameButton.value.hidden = updatedUserName.value === store.state.websocket.userName
   }
 
   function checkRoomNameValidity(){
@@ -70,6 +70,7 @@
     <div class="flex flex-row">
       <h2 class="text-xl font-bold dark:text-white">Welcome back 
         <input class="ml-2 p-2 bg-base-200" v-model="updatedUserName" v-on:input="updateButtonVisibility()">
+        <div class="hidden">{{ userName }}</div>
       </h2>
       <button ref="UpdateNameButton" class="ml-2 -mt-0.5 btn btn-outline btn-success" hidden @click="updateUserName()">Update</button>
     </div>

@@ -30,6 +30,4 @@ const store = createStore({
 
 export default store
 
-
 store.commit("register_client_id", clientId)
-

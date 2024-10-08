@@ -18,6 +18,7 @@ const state = () => ({
     userName: '',
     currentRoom: null,
     rooms: [],
+    users: [],
     websocket: null
 })
 
@@ -33,7 +34,7 @@ const mutations = {
     error(state, data){ notify_error(data.error); },
 
     register_client_id(state, clientId){
-        state.clientId = clientId
+        state.clientId = clientId;
     },
 
     send () { return; },
@@ -45,39 +46,13 @@ const mutations = {
     },
 
     retrieve_user(state, data){
-        state.userName = data.user.name
+        state.userName = data.user.name;
     },
 
     update_user_name(state, data){
-        state.userName = data.user.name
-        notify_success(data.success)
+        state.userName = data.user.name;
+        notify_success(data.success);
     },
-
-    create_room(state, data){
-        // #TODO : maybe move that in another call ?
-        // if (data.client_id == state.clientId){ 
-        //state.currentRoom = data.room;
-        notify_success(data.success)
-        // }
-    
-        // state.rooms.push(
-        //     data.room
-        // );
-    },
-
-    join_room(state, data){
-        // #TODO : maybe move that in another call ?
-        // #TODO : just getting repeated at each call, we need to improve this.
-        // state.currentRoom = room.get_client_room(data.rooms, state.clientId) 
-        // state.rooms = data.rooms;
-        notify_success(data.success)
-    },
-
-    leave_room(state, data){
-        // state.currentRoom = room.get_client_room(data.rooms, state.clientId) 
-        // state.rooms = data.rooms;
-        notify_success(data.success)
-    }
 
 }
 

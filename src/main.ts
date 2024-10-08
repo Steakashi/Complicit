@@ -8,9 +8,9 @@ import 'vue3-toastify/dist/index.css';
 
 
 var app = createApp(App)
+app.use(router)
 app.use(store)
 app.use(FloatingVue)
-app.use(router)
 app.use(
     Vue3Toasity,
     {

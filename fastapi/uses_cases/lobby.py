@@ -24,8 +24,10 @@ async def update_user_name(connection_manager: ConnectionManager, client_id: str
     await send.to_client(
         active_connections=connection_manager.connections,
         client_id=client_id,
-        message=messages.success(
+        message=messages.default(
+            action="update_user_name",
             client_id=client_id,
+            user=concerned_user,
             success="Username has been correctly updated."
         )
     )
