@@ -3,6 +3,13 @@ from loguru import logger
 from entities import Room
 
 
+def create(room_name, user):
+    return Room(
+        room_name,
+        user
+    )
+
+
 def get_from_user(rooms, user):
     return next(
         iter(
@@ -18,13 +25,6 @@ def get(rooms, room_name):
 
 def set_next_user_as_leader(room):
     room.leader = room.users[0]
-
-
-def create(room_name, user):
-    return Room(
-        room_name,
-        user
-    )
 
 
 def add_user(room, user):
@@ -44,3 +44,6 @@ def remove_user(rooms, room, user):
     else:
         set_next_user_as_leader(room)
 
+
+def assign_game(room, game):
+    room.game = game

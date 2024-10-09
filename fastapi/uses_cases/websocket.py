@@ -44,7 +44,7 @@ async def connect(connection_manager: ConnectionManager, websocket: WebSocket, c
         users.add(connection_manager.users, user)
         logger.debug(f"User with ID {client_id} has not been found et has been added to users list.")
 
-    users.connect_user(user)
+    users.connect(user)
 
     await send.to_client(
         active_connections=connection_manager.connections,
@@ -88,7 +88,7 @@ async def disconnect(connection_manager: ConnectionManager, websocket: WebSocket
         rooms.remove_user(connection_manager.rooms, room, user)
         logger.info(f"User named {user.name} with id {user.id} has been removed from room named {room.name} due to disconnection.")
 
-    users.disconnect_user(user)
+    users.disconnect(user)
 
     await send.to_all(
         active_connections=connection_manager.connections,
@@ -105,10 +105,37 @@ async def receive_data(websocket_client: WebSocket):
     return await websocket_client.receive_json()
 
 
-async def synchronize(connection_manager: ConnectionManager, client_id: str):
-    logger.debug(f"Synchronize order has been received from client with id {client_id}.")
+async def synchronize_for_all(connection_manager: ConnectionManager, client_id: str):
+    logger.debug(f"Synchronize order has been received from client with id {client_id} for all users.")
     await send.to_all(
         active_connections=connection_manager.connections,
+        message=messages.default(
+            action="synchronize",
+            client_id=client_id,
+            rooms=connection_manager.rooms,
+            users=connection_manager.users
+        )
+    )
+
+async def synchronize_for_room(connection_manager: ConnectionManager, client_id: str, room_name: str):
+    logger.debug(f"Synchronize order has been received from client with id {client_id} for room named {room_name}.")
+    concerned_room = rooms.get(connection_manager.rooms, room_name)
+
+    if not concerned_room:
+        logger.error(f"Can't find room with name {room_name}. Order has ben canceled.")
+        await send.to_client(
+            active_connections=connection_manager.connections,
+            client_id=client_id,
+            message=messages.error(
+                client_id=client_id,
+                error=f"Can't find room with name {room_name}."
+            )
+        )
+        return
+
+    await send.to_room(
+        active_connections=connection_manager.connections,
+        room=concerned_room,
         message=messages.default(
             action="synchronize",
             client_id=client_id,

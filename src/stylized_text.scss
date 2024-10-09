@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+.stylized_cell {
+  // border: 1px solid #fff1;
+  z-index: 2;
+}
+
+@for $i from 0 to 15 {
+  .stylized_cell:nth-child(15n + #{$i + 1}):hover ~ .content {
+    --positionX: #{$i};
+  }
+  .stylized_cell:nth-child(n + #{15 * $i + 1}):nth-child(-n + #{15 * ($i + 1)}):hover ~ .content {
+    --positionY: #{$i};
+  }
+}
+
+.stylized_content {
+  --positionX: 7;
+  --positionY: 7;
+  top: 0; right: 0; bottom: 0; left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stylized_css {
+  font-family: 'Fredoka One', cursive;
+  position: absolute;
+  top: 260px; left: 50%;
+  animation: color 3s infinite linear;
+  text-shadow: 0 0 10px #000a;
+  transition: all 0.5s;
+
+  @for $i from 0 to 10 {
+    &:nth-child(#{$i + 1}) {
+      font-size: #{100 + $i * 10}px;
+      animation-delay: #{$i * -0.3}s;
+      opacity: #{0.1 + $i * 0.1};
+      transform:
+        translateX(calc(-50% - (var(--positionX) - 7) * #{(7 - $i) * 3px}))
+        translateY(calc(-50% - (var(--positionY) - 7) * #{(7 - $i) * 3px}))
+        rotateX(calc(0deg - (var(--positionY) - 7) * 5deg))
+        rotateY(calc((var(--positionX) - 7) * 5deg));
+    }
+  }
+
+  @keyframes color {
+    @for $c from 0 through 10 {
+      #{$c * 10%} { color: hsl(36 * $c, 75%, 75%); }
+    }
+  }
+}

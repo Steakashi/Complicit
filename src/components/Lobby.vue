@@ -39,7 +39,7 @@
     }
   })
 
-  function submitForm() { send.create_room(roomName.value); }
+  function createRoom() { send.create_room(roomName.value); }
   function joinRoom(joinedRoomName) { send.join_room(joinedRoomName); }
   function leaveRoom(roomNameToLeave) { send.leave_room(roomNameToLeave); }
   function updateUserName() { send.update_user_name(updatedUserName.value); }
@@ -57,15 +57,14 @@
   }
 
   function launchGame(roomName) {
-    router.push('/game')
+    send.launch_game(roomName)
+    //router.push('/game')
   }
 
 </script>
 
 <template>
-            
-  <h1 class="mb-4 text-center text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Complicit</h1>
-    
+                
   <div class="container mx-auto w-[64rem] mt-8">
     <div class="flex flex-row">
       <h2 class="text-xl font-bold dark:text-white">Welcome back 
@@ -123,7 +122,7 @@
         <input ref="lobbyCheckbox" type="checkbox" :disabled="currentRoom"/>
         <div class="collapse-title text-xl font-medium" :class="{ 'opacity-30': currentRoom }">Create Room</div>
         <div class="collapse-content">
-          <form @submit.prevent="submitForm" class="flex flex-row">
+          <form @submit.prevent="createRoom" class="flex flex-row">
             <input type="text" v-model="roomName" class="p-1 mr-2" @keyup.enter="submit" :disabled="currentRoom" v-on:input="checkRoomNameValidity()" required>
             <button type="submit" ref="lobbyButton" class="btn btn-success" role="button" :disabled="currentRoom">
               Create Room

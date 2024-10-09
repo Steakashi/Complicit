@@ -18,4 +18,3 @@ app.use(
     } as ToastContainerOptions,
 )
 app.mount('#app')
-

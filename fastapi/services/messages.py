@@ -1,4 +1,4 @@
-from entities import Room, User
+from entities import Room, User, Game
 
 
 def _generate_message(action, client_id, **args):
@@ -6,7 +6,7 @@ def _generate_message(action, client_id, **args):
         for key, value in args.items():
             if type(value) == list:
                 message[key] = [single_value.flattened for single_value in value]
-            elif type(value) in [Room, User]:
+            elif type(value) in [Room, User, Game]:
                 message[key] = value.flattened
             else:
                 message[key] = value
@@ -17,6 +17,7 @@ def _generate_message(action, client_id, **args):
                 'client_id': client_id,
             }
         )
+
         return message
 
 

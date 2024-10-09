@@ -29,8 +29,12 @@ async def to_others(active_connections: list, client_id: int, message: str):
             logger.error(f"Can't send json to websocket {websocket}.")
     logger.info(f"Global message '{message}' has been correctly sent to all users except client with id {client_id}.")
 
-async def to_room(self, message: str):
-    pass
-    # for room in self.rooms:
-    #     for user in room.users:
-    #         await user.send_text(message)
+
+async def to_room(active_connections: list, room: object, message: str):
+    for user in room.users:
+        for websocket in await connections.get_with(active_connections, user.id):
+            try:
+                await websocket.send_json(message)
+            except RuntimeError:
+                logger.error(f"Can't send json to websocket {websocket}.")
+    logger.info(f"Room message '{message}' has been correctly sent to client in room {room.name}.")

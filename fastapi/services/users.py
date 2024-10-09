@@ -4,26 +4,40 @@ from pathlib import Path
 
 from loguru import logger
 
-from entities import UserStatus
+from entities import UserStatus, InGameStatus
 
 
 def get_from_room(room, user):
     return next(iter(room_user for room_user in room.users if user == room_user), None)
 
+
 def get(users, client_id):
         return next(iter(user for user in users if user.id == client_id), None)
+
 
 def add(users, user):  
     users.append(user)
 
+
 def update_name(user, new_name):
     user.name = new_name
 
-def connect_user(user):
-     user.status = UserStatus.CONNECTED
 
-def disconnect_user(user):
-     user.status = UserStatus.DISCONNECTED
+def connect(user):
+    user.status = UserStatus.CONNECTED
+
+
+def disconnect(user):
+    user.status = UserStatus.DISCONNECTED
+
+
+def await_for_answer(user):
+     user.game_status = InGameStatus.WAITING
+
+
+def validate_answer(user):
+    user.game_status = InGameStatus.ANSWERED
+
 
 def generate_user_name():
     usernames_file_path = Path("./static/usernames.json").resolve()

@@ -1,17 +1,6 @@
-import { toast } from 'vue3-toastify';
 import room from '../../api/room';
-
-const notify_error = (error) => {
-    toast.error(error, {
-        autoClose: 2000,
-    });
-}
-
-const notify_success = (success) => {
-    toast.success(success, {
-        autoClose: 2000,
-    });
-}
+import router from '../../router'
+import * as notifier from '../../notifier'             
 
 const state = () => ({
     clientId: null,
@@ -19,7 +8,8 @@ const state = () => ({
     currentRoom: null,
     rooms: [],
     users: [],
-    websocket: null
+    websocket: null,
+    game: null
 })
 
 const actions = {
@@ -30,8 +20,8 @@ const actions = {
 }
 
 const mutations = {
-    success(state, data){ notify_success(data.success) },
-    error(state, data){ notify_error(data.error); },
+    success(state, data){ notifier.success(data.success) },
+    error(state, data){ notifier.error(data.error); },
 
     register_client_id(state, clientId){
         state.clientId = clientId;
@@ -51,8 +41,17 @@ const mutations = {
 
     update_user_name(state, data){
         state.userName = data.user.name;
-        notify_success(data.success);
+        notifier.success(data.success);
     },
+
+    launch_game(state, data){
+        state.game = data.game
+        router.push('/game').then(() => notifier.success(data.success));
+    },
+
+    trigger_guess_phase(state, data){
+        console.log('next step !')
+    }
 
 }
 

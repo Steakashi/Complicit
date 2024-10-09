@@ -51,6 +51,28 @@ export default {
                 user_name: user_name
             }
         )
+    },
+
+    launch_game(room_name){
+        store.dispatch(
+            SEND,
+            {
+                action: "launch_game",
+                room_name: room_name
+            }
+        )
+    },
+
+    validate_answer(room_name,game_id, answer){
+        store.dispatch(
+            SEND,
+            {
+                action: "register_answer",
+                room_name: room_name,
+                game_id: game_id,
+                answer: answer
+            }
+        )
     }
 
 }
