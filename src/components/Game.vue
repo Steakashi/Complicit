@@ -10,8 +10,14 @@
 
   const themeAnswer = defineModel()
 
+  const AnswerValidationButton = ref(null)  
+
   const game = computed(() => { return store.state.websocket.game; })
   const theme = computed(() => { return store.state.websocket.game.theme; })
+  const answer = computed(() => {
+    if (store.state.websocket.answer) { updateButtonVisibility(); }
+    return store.state.websocket.answer; 
+  })
   const pairedUser = computed(() => {
     let pairedUserID = store.state.websocket.game.pairs[store.state.websocket.clientId]
     for (let i=0; i<store.state.websocket.currentRoom.users.length; i++){
@@ -24,6 +30,10 @@
   const currentRoom = computed(() => {
     return store.state.websocket.currentRoom 
   })
+
+  function updateButtonVisibility(){
+    AnswerValidationButton.value.disabled = themeAnswer.value === store.state.websocket.answer
+  }
 
   function validateAnswer() { 
     send.validate_answer(
@@ -81,13 +91,17 @@
         </div>
       </div>
       <form @submit.prevent="validateAnswer" class="flex flex-row p-2">
-        <input type="text" v-model="themeAnswer" placeholder="Choose a good thing that fits the theme !" class="placeholder-gray-600 placeholder:italic py-2 px-4 mr-2 w-10/12" @keyup.enter="submit" v-on:input="" required>
-        <button type="submit" ref="lobbyButton" class="btn btn-success" role="button">Validate answer</button>
+        <input type="text" v-model="themeAnswer" v-on:input="updateButtonVisibility()" placeholder="Choose a good thing that fits the theme !" class="placeholder-gray-600 placeholder:italic py-2 px-4 mr-2 w-10/12" @keyup.enter="submit" required>
+        <button ref="AnswerValidationButton" type="submit" class="btn btn-success" :class="{'btn-warning': answer}" role="button">
+          <span v-if="answer">Update answer</span>
+          <span v-else>Validate answer</span>  
+        </button>
+        <div class="hidden">{{ answer }}</div>
       </form>
     </div>
 
     <div class="toast toast-end">
-      <div class="alert">
+      <div class="alert block">
         <div class="flex flex-row" v-for="user in currentRoom.users">
           <span class="flex flex-row" v-if="user.game_status == 'ANSWERED'">
             <span class="flex text-green-600">{{ user.name }}</span>

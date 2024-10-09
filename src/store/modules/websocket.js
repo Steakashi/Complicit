@@ -2,6 +2,8 @@ import room from '../../api/room';
 import router from '../../router'
 import * as notifier from '../../notifier'             
 
+
+    // TODO : reset answer when game is ended
 const state = () => ({
     clientId: null,
     userName: '',
@@ -9,7 +11,8 @@ const state = () => ({
     rooms: [],
     users: [],
     websocket: null,
-    game: null
+    game: null,
+    answer: '',
 })
 
 const actions = {
@@ -40,13 +43,18 @@ const mutations = {
     },
 
     update_user_name(state, data){
-        state.userName = data.user.name;
+        state.userName = data.user.name;    
         notifier.success(data.success);
     },
 
     launch_game(state, data){
-        state.game = data.game
+        state.game = data.game;
         router.push('/game').then(() => notifier.success(data.success));
+    },
+
+    register_answer(state, data){
+        state.answer = data.answer;
+        notifier.success(data.success);
     },
 
     trigger_guess_phase(state, data){

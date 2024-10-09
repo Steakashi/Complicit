@@ -98,8 +98,8 @@ async def register_answer(connection_manager: ConnectionManager, client_id: str,
             room=concerned_room,
             message=messages.default(
                 action="trigger_guess_phase",
-                game=concerned_game,
                 client_id=client_id,
+                game=concerned_game,
                 success=f"Game has started. Enjoy !"
             )
         )
@@ -107,8 +107,10 @@ async def register_answer(connection_manager: ConnectionManager, client_id: str,
     await send.to_client(
         active_connections=connection_manager.connections,
         client_id=client_id,
-        message=messages.success(
+        message=messages.default(
+            action="register_answer",
             client_id=client_id,
+            answer=answer,
             success=f"Your answer '{ answer }' has been successfully registered."
         )
     )
