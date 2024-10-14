@@ -57,7 +57,8 @@ const mutations = {
         notifier.success(data.success);
     },
 
-    trigger_guess_phase(state, data){
+    trigger_associations_phase(state, data){
+        state.game = data.game
         console.log('next step !')
     }
 

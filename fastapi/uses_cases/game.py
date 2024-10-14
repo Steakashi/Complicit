@@ -23,6 +23,7 @@ async def launch_game(connection_manager: ConnectionManager, client_id: str, roo
     theme = games.pick_theme()
     pairs = games.generate_pairs(concerned_room.users)
     game = games.create(theme, pairs)
+    games.set_answer_phase(game)
     games.add_game(connection_manager.games, game)
     rooms.assign_game(concerned_room, game)
 
@@ -92,15 +93,17 @@ async def register_answer(connection_manager: ConnectionManager, client_id: str,
                 )
             )
             return
+        
+        games.set_associations_phase(concerned_game)
 
         await send.to_room(
             active_connections=connection_manager.connections,
             room=concerned_room,
             message=messages.default(
-                action="trigger_guess_phase",
+                action="trigger_associations_phase",
                 client_id=client_id,
                 game=concerned_game,
-                success=f"Game has started. Enjoy !"
+                success=f"All answers has been registered. Associations phase will now begin."
             )
         )
 

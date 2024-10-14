@@ -58,7 +58,6 @@
 
   function launchGame(roomName) {
     send.launch_game(roomName)
-    //router.push('/game')
   }
 
 </script>

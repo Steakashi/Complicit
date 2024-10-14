@@ -5,14 +5,14 @@
   z-index: 2;
 }
 
-@for $i from 0 to 15 {
-  .stylized_cell:nth-child(15n + #{$i + 1}):hover ~ .content {
-    --positionX: #{$i};
-  }
-  .stylized_cell:nth-child(n + #{15 * $i + 1}):nth-child(-n + #{15 * ($i + 1)}):hover ~ .content {
-    --positionY: #{$i};
-  }
-}
+// @for $i from 0 to 15 {
+//   .stylized_cell:nth-child(15n + #{$i + 1}):hover ~ .content {
+//     --positionX: #{$i};
+//   }
+//   .stylized_cell:nth-child(n + #{15 * $i + 1}):nth-child(-n + #{15 * ($i + 1)}):hover ~ .content {
+//     --positionY: #{$i};
+//   }
+// }
 
 .stylized_content {
   --positionX: 7;
@@ -26,7 +26,7 @@
 .stylized_css {
   font-family: 'Fredoka One', cursive;
   position: absolute;
-  top: 260px; left: 50%;
+  top: 280px; left: 50%;
   animation: color 3s infinite linear;
   text-shadow: 0 0 10px #000a;
   transition: all 0.5s;

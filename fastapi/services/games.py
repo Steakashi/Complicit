@@ -5,7 +5,7 @@ from copy import deepcopy
 
 from loguru import logger
 
-from entities import Game
+from entities import Game, GamePhase
 
 
 def create(theme, pairs):
@@ -46,4 +46,12 @@ def generate_pairs(players):
 
 def register_answer(game, user_id, answer):
     game.answers[user_id] = answer
+
+
+def set_answer_phase(game):
+    game.phase = GamePhase.ANSWER
+
+
+def set_associations_phase(game):
+    game.phase = GamePhase.ASSOCIATIONS
      
