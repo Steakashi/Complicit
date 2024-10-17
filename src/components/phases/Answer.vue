@@ -12,13 +12,12 @@
 
   const AnswerValidationButton = ref(null)  
 
-  
   const answer = computed(() => {
-    if (store.state.websocket.answer) { updateButtonVisibility(); }
+    updateButtonVisibility();
     return store.state.websocket.answer; 
   })
   const pairedUser = computed(() => {
-    let pairedUserID = store.state.websocket.game.pairs[store.state.websocket.clientId]
+    let pairedUserID = store.state.websocket.currentRoom.game.pairs[store.state.websocket.clientId]
     for (let i=0; i<store.state.websocket.currentRoom.users.length; i++){
       if (store.state.websocket.currentRoom.users[i].id == pairedUserID){
         return store.state.websocket.currentRoom.users[i]
@@ -31,13 +30,15 @@
   })
 
   function updateButtonVisibility(){
-    AnswerValidationButton.value.disabled = themeAnswer.value === store.state.websocket.answer
+    if (AnswerValidationButton.value && store.state.websocket.answer != null){
+      AnswerValidationButton.value.disabled = themeAnswer.value === store.state.websocket.answer
+    }
   }
 
   function validateAnswer() { 
     send.validate_answer(
       store.state.websocket.currentRoom.name, 
-      store.state.websocket.game.id, 
+      store.state.websocket.currentRoom.game.id, 
       themeAnswer.value
     ); 
   }
@@ -45,6 +46,8 @@
   function show_users_states(){
 
   }
+
+  themeAnswer.value = store.state.websocket.answer
 
 </script>
 
@@ -72,7 +75,6 @@
           <span v-if="answer">Update answer</span>
           <span v-else>Validate answer</span>  
         </button>
-        <div class="hidden">{{ answer }}</div>
       </form>
     </div>
 

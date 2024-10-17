@@ -138,7 +138,13 @@ async def leave_room(connection_manager: ConnectionManager, client_id: str, room
         )
         return
 
-    rooms.remove_user(connection_manager.rooms, room, user)
+    rooms.remove_user(room, user)
+    logger.info(f"User named {user.name} with id {user.id} has been removed from room named {room.name} due to disconnection.")
+
+    if room.is_empty:
+        rooms.delete_room(connection_manager.rooms, room)
+        logger.info(f"Room with name {room.name} has no longer user in it and has been erased.")
+
     await send.to_client(
         active_connections=connection_manager.connections,
         client_id=client_id,

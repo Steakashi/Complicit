@@ -49,4 +49,8 @@ class Game(object):
         for _, target_id in self.pairs.items():
             if not self.answers.get(target_id): return False
         return True
+    
+    @property
+    def in_progress(self):
+        return self.status == GameStatus.STARTED
 

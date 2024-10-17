@@ -18,6 +18,7 @@
   const clientId = computed(() => { return store.state.websocket.clientId; })
   const rooms = computed(() => { return store.state.websocket.rooms; })
   const users = computed(() => { return store.state.websocket.users; })
+  const gameInProgress = computed(() => { return store.state.websocket.currentRoom.game_in_progress; })
   const userName = computed(() => {
     updatedUserName.value = store.state.websocket.userName;
     if (UpdateNameButton.value){ UpdateNameButton.value.hidden = true; }
@@ -29,11 +30,11 @@
     }
     return store.state.websocket.currentRoom 
   })
-
   const lobbyTooltip = computed(() => {
     if (!(store.state.websocket.currentRoom)) { return; }
     else {
-      if (store.state.websocket.currentRoom.users.length == 1) { return "There is not enough players to launch game."; }
+      if (store.state.websocket.currentRoom.game_in_progress) { return "Re-join already started game." }
+      else if (store.state.websocket.currentRoom.users.length == 1) { return "There is not enough players to launch game."; }
       else if (store.state.websocket.currentRoom.leader.id != store.state.websocket.clientId) { return "Only the leader of the room can launch game."; }
       else return;
     }
@@ -57,7 +58,8 @@
   }
 
   function launchGame(roomName) {
-    send.launch_game(roomName)
+    if (store.state.websocket.currentRoom.game_in_progress) { router.push('/play'); }
+    else send.launch_game(roomName);
   }
 
 </script>
@@ -95,10 +97,12 @@
                   disabled: (!(lobbyTooltip))
               }">
               <button @click="launchGame(currentRoom.name)" 
-                class="btn btn-outline btn-success mr-6" 
+                class="btn btn-outline mr-6"
+                :class="gameInProgress ? 'btn-warning': 'btn-success'"
                 :disabled="!(lobbyTooltip)"
                 >
-                Launch game
+                <span v-if="gameInProgress">Re-join game</span>
+                <span v-else="gameInProgress">Launch game</span>
               </button>
             </div>
 

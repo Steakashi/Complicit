@@ -29,8 +29,17 @@ class Room(object):
         result.update(
             {
                 'leader': self.leader.flattened,
-                'users': users
+                'users': users,
+                'game_in_progress': self.game_in_progress
             }
         )
         if self.game: result.update({'game': self.game.flattened})
         return result
+    @property
+    def is_empty(self):
+        return bool(self.users)
+
+    @property
+    def game_in_progress(self):
+        return self.game and self.game.in_progress 
+        

@@ -5,7 +5,7 @@ import Game from './components/Game.vue'
 
 const routes = [
   { path: '/', component: Lobby },
-  { path: '/game', component: Game },
+  { path: '/play', component: Game },
 ]
 
 const router = createRouter({

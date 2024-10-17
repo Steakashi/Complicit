@@ -24,7 +24,7 @@ def get(rooms, room_name):
 
 
 def set_next_user_as_leader(room):
-    room.leader = room.users[0]
+    if room.users: room.leader = room.users[0]
 
 
 def add_user(room, user):
@@ -35,14 +35,13 @@ def add_room(rooms, room):
     rooms.append(room)
 
 
-def remove_user(rooms, room, user):
+def delete_room(rooms, room):
+    rooms.remove(room)
+
+
+def remove_user(room, user):
     room.users.remove(user)
-    if not room.users:
-        rooms.remove(room)
-        logger.info(f"Room with name {room.name} has no longer user in it and has been erased.")
-    
-    else:
-        set_next_user_as_leader(room)
+    set_next_user_as_leader(room)
 
 
 def assign_game(room, game):

@@ -88,6 +88,10 @@ async def disconnect(connection_manager: ConnectionManager, websocket: WebSocket
         rooms.remove_user(connection_manager.rooms, room, user)
         logger.info(f"User named {user.name} with id {user.id} has been removed from room named {room.name} due to disconnection.")
 
+        if room.is_empty:
+            rooms.delete_room(connection_manager.rooms, room)
+            logger.info(f"Room with name {room.name} has no longer user in it and has been erased.")
+
     users.disconnect(user)
 
     await send.to_all(

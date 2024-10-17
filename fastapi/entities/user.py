@@ -5,7 +5,7 @@ class UserStatus(Enum):
     CONNECTED = "CONNECTED"
     DISCONNECTED = "DISCONNECTED"
     WAITING = "WAITING"
-
+    
 
 class InGameStatus(Enum):
     WAITING = "WAITING"

@@ -94,6 +94,9 @@ async def register_answer(connection_manager: ConnectionManager, client_id: str,
             )
             return
         
+        for user in concerned_room.users:
+            users.await_for_answer(user)
+        
         games.set_associations_phase(concerned_game)
 
         await send.to_room(

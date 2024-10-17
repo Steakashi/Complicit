@@ -3,7 +3,7 @@ import router from '../../router'
 import * as notifier from '../../notifier'             
 
 
-    // TODO : reset answer when game is ended
+// @TODO : reset answer when game is ended
 const state = () => ({
     clientId: null,
     userName: '',
@@ -11,8 +11,7 @@ const state = () => ({
     rooms: [],
     users: [],
     websocket: null,
-    game: null,
-    answer: '',
+    answer: null,
 })
 
 const actions = {
@@ -36,6 +35,11 @@ const mutations = {
         state.currentRoom = room.get_client_room(data.rooms, state.clientId);
         state.rooms = data.rooms;
         state.users = data.users;
+        
+        if (state.currentRoom && state.currentRoom.game){
+            const targetedPairId = state.currentRoom.game.pairs[state.clientId]
+            state.answer = state.currentRoom.game.answers[targetedPairId]
+        }
     },
 
     retrieve_user(state, data){
@@ -48,8 +52,7 @@ const mutations = {
     },
 
     launch_game(state, data){
-        state.game = data.game;
-        router.push('/game').then(() => notifier.success(data.success));
+        router.push('/play').then(() => notifier.success(data.success));
     },
 
     register_answer(state, data){
@@ -58,8 +61,7 @@ const mutations = {
     },
 
     trigger_associations_phase(state, data){
-        state.game = data.game
-        console.log('next step !')
+        return
     }
 
 }
